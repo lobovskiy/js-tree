@@ -3,20 +3,19 @@ import tree from '../api/simple.js'
 console.log(tree);
 
 const wrapper = document.getElementById('theTree');
-let rootNodes = '<ul>';
 
-for (let i = 0; i < tree.length; i++) {
-    rootNodes += `<li data-id="${tree[i].id}">${tree[i].name}`;
-    if (tree[i].child) {
-        rootNodes += '<ul>';
-        tree[i].child.forEach(child => {
-            rootNodes += `<li data-id="${child.id}">${child.name}</li>`;
-        })
-        rootNodes += '</ul>';
-    }
-    rootNodes += '</li>';
+function renderTree(arr) {
+    const list = document.createElement('ul');
+    console.log(list);
+    arr.forEach(treeNode => {
+        const listItem = document.createElement('li');
+        listItem.append(treeNode.name);
+        list.append(listItem);
+        if (treeNode.child) {
+            listItem.append(renderTree(treeNode.child));
+        }
+    })
+    return list;
 }
 
-rootNodes += '</ul>';
-
-wrapper.innerHTML = rootNodes;
+wrapper.append(renderTree(tree));
