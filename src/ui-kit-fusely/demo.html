@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+<link rel="icon" href="favicon.png"><script defer src="bundle.js"></script><link href="style.css" rel="stylesheet"></head>
+<body>
+    <h1>Fusely UI Kit</h1>
+    <h2>Buttons</h2>
+    <div>
+        <div class="fus-button">Button</div>
+        <div class="fus-button fus-button_primary">Button primary</div>
+        <div class="fus-button fus-button_light">Button light</div>
+        <div class="fus-button fus-button-outline">Outline button</div>
+        <div class="fus-button fus-button-outline_primary">Outline button primary</div>
+        <div class="fus-underline-button">Underline button</div>
+    </div>
+    <h2>Price cards</h2>
+    <div>
+        <div class="fus-plan-card">
+            <div class="fus-plan-card__title">Enterprise</div>
+            <div class="fus-plan-card__price">
+                $49<div class="fus-plan-card__price-period">/month</div>
+            </div>
+            <div class="fus-plan-card__features">
+                <div>All features in <span>Premium</span></div>
+                <div>Realtime overview</div>
+                <div>Mobile app</div>
+            </div>
+            <a href="#" class="fus-plan-card__button fus-button fus-button-outline_primary">Get Started</a>
+        </div>
+        <div class="fus-plan-card fus-plan-card_selected">
+            <div class="fus-plan-card__title">Premium</div>
+            <div class="fus-plan-card__price">
+                $29<div class="fus-plan-card__price-period">/month</div>
+            </div>
+            <div class="fus-plan-card__features">
+                <div>Dashboard & Analysis</div>
+                <div>Premium Support</div>
+                <div>Tracking Service</div>
+            </div>
+            <a href="#" class="fus-plan-card__button fus-button fus-button_light">Get Started</a>
+        </div>
+    </div>
+    <h2>Blog article</h2>
+    <div class="fus-article-snippet">
+        <div class="fus-article-snippet__image">
+            <img src="assets/img/image.png" alt="Image">
+        </div>
+        <div class="blog__row-content-body fus-article-snippet__body">
+            <div class="fus-article-snippet__title">Introducing Fusely Engage</div>
+            <div class="fus-article-snippet__text">We’re happy to announce the Fusely Engage. The first growth automation platform designed for the digital interactions.</div>
+            <a href="#" class="fus-article-snippet__button-underline fus-underline-button">Read more</a>
+        </div>
+    </div>
+</body>
+</html>

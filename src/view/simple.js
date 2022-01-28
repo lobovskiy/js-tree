@@ -6,7 +6,9 @@ const wrapper = document.getElementById('theTree');
 
 function renderTree(arr) {
     const list = document.createElement('ul');
+    
     console.log(list);
+    
     arr.forEach(treeNode => {
         const listItem = document.createElement('li');
         listItem.append(treeNode.name);
@@ -15,6 +17,7 @@ function renderTree(arr) {
             listItem.append(renderTree(treeNode.child));
         }
     })
+    
     return list;
 }
 

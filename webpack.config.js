@@ -11,7 +11,7 @@ module.exports = {
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
   watch: false,
   devServer: {
@@ -30,10 +30,19 @@ module.exports = {
       },
       {
         test: /\.s[ca]ss$/,
+        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           { loader: 'css-loader', options: { sourceMap: false } },
           'sass-loader',
+        ]
+      },
+      {
+        test: /\.css$/i,
+        include: /src\\ui-kit.*\\/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          { loader: 'css-loader', options: { sourceMap: false } }
         ]
       },
       {
@@ -65,7 +74,7 @@ module.exports = {
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'style.css',
+      filename: 'blocks.[name].build.css',
     }),
     new HtmlWebpackPlugin({
       title: 'JS Tree',
@@ -80,7 +89,25 @@ module.exports = {
   optimization: {
     minimize: true,
     minimizer: [
-      new CssMinimizerPlugin(),
+      new CssMinimizerPlugin({
+        exclude: 'fus-style.css',
+      }),
     ],
+    splitChunks: {
+      cacheGroups: {
+          style: {
+              name: 'style',
+              test: /style\.s?css$/,
+              chunks: 'all',
+              enforce: true,
+          },
+          fusStyle: {
+              name: 'ui-kit',
+              test: /fus-style\.css$/,
+              chunks: 'all',
+              enforce: true,
+          },
+      },
+    },
   },
 };
