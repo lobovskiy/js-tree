@@ -7,7 +7,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src',
+  entry: {
+    main: './src',
+    lib: './src/lib'
+  },
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -26,6 +29,7 @@ module.exports = {
     rules: [
       {
         test: /\.html$/i,
+        exclude: /node_modules/,
         use: "html-loader"
       },
       {
@@ -39,7 +43,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        include: /src\\ui-kit.*\\/,
+        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           { loader: 'css-loader', options: { sourceMap: false } }
@@ -47,6 +51,7 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        exclude: /node_modules/,
         type: 'asset/resource',
         generator: {
           filename: 'assets/img/[name][hash][ext]'
@@ -54,6 +59,7 @@ module.exports = {
       },
       {
         test: /\.(woff(2)?|eot|ttf|otf)$/i,
+        exclude: /node_modules/,
         type: 'asset/resource',
         generator: {
           filename: 'assets/font/[name][hash][ext]'
@@ -74,7 +80,7 @@ module.exports = {
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'blocks.[name].build.css',
+      filename: '[name].css',
     }),
     new HtmlWebpackPlugin({
       title: 'JS Tree',
@@ -90,24 +96,8 @@ module.exports = {
     minimize: true,
     minimizer: [
       new CssMinimizerPlugin({
-        exclude: 'fus-style.css',
+        exclude: 'lib.css',
       }),
     ],
-    splitChunks: {
-      cacheGroups: {
-          style: {
-              name: 'style',
-              test: /style\.s?css$/,
-              chunks: 'all',
-              enforce: true,
-          },
-          fusStyle: {
-              name: 'ui-kit',
-              test: /fus-style\.css$/,
-              chunks: 'all',
-              enforce: true,
-          },
-      },
-    },
   },
 };
