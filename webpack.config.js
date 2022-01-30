@@ -7,10 +7,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: {
-    main: './src',
-    lib: './src/lib'
-  },
+  context: path.resolve(__dirname, 'src'),
+  entry: './',
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -29,12 +27,10 @@ module.exports = {
     rules: [
       {
         test: /\.html$/i,
-        exclude: /node_modules/,
         use: "html-loader"
       },
       {
         test: /\.s[ca]ss$/,
-        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           { loader: 'css-loader', options: { sourceMap: false } },
@@ -43,7 +39,6 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           { loader: 'css-loader', options: { sourceMap: false } }
@@ -51,7 +46,6 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        exclude: /node_modules/,
         type: 'asset/resource',
         generator: {
           filename: 'assets/img/[name][hash][ext]'
@@ -59,7 +53,6 @@ module.exports = {
       },
       {
         test: /\.(woff(2)?|eot|ttf|otf)$/i,
-        exclude: /node_modules/,
         type: 'asset/resource',
         generator: {
           filename: 'assets/font/[name][hash][ext]'
@@ -84,7 +77,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       title: 'JS Tree',
-      template: './src/index.html',
+      template: './index.html',
       filename: 'index.html',
     }),
     new CleanWebpackPlugin(),
@@ -96,8 +89,18 @@ module.exports = {
     minimize: true,
     minimizer: [
       new CssMinimizerPlugin({
-        exclude: 'lib.css',
+        exclude: 'ui-kit-style.css',
       }),
     ],
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'ui-kit-style',
+          test: /lib\\ui-kit-.*\\style\.css$/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
   },
 };
