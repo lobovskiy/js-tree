@@ -1,4 +1,4 @@
-import tree from '../api/simple.js'
+import tree from '../api/tree.js'
 
 console.log(tree);
 
