@@ -1,3 +1,3 @@
-import './view/simple.js';
+import './view/async.js';
 
 import './css/style.scss';
