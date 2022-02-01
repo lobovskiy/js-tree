@@ -5,3 +5,16 @@ a, a:visited{text-decoration:none;}
     margin: 0 auto;
     max-width: 1280px;
 }
+
+.trees_row {
+    display: flex;
+    align-items: start;
+    margin-top: 20px;
+}
+
+.trees__column {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+}

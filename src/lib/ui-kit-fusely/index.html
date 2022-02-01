@@ -1,0 +1,110 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo of the fusely UI Kit</title><link rel="icon" href="favicon.png"><script defer="defer" src="main.bundle.js"></script><link href="style.css" rel="stylesheet"></head><body><h1 class="demo-title">Fusely UI Kit</h1><p>To use the kit just link <code class="demo-highlight">style.css</code> with your app. Follow the usage examples and instructions below to use the kit elements.</p><h2 class="demo-title">Buttons</h2><div><div class="fus-button">Button</div><div class="fus-button fus-button_primary">Button primary</div><div class="fus-button fus-button_light">Button light</div><div class="fus-button fus-button-outline">Outline button</div><div class="fus-button fus-button-outline_primary">Outline button primary</div><div class="fus-underline-button">Underline button</div></div><h2 class="demo-title">Buttons Usage</h2><pre><code>
+        &lt;div class=&quot;fus-button&quot;&gt;Button&lt;/div&gt;
+        &lt;div class=&quot;fus-button fus-button_primary&quot;&gt;Button primary&lt;/div&gt;
+        &lt;div class=&quot;fus-button fus-button_light&quot;&gt;Button light&lt;/div&gt;
+        &lt;div class=&quot;fus-button fus-button-outline&quot;&gt;Outline button&lt;/div&gt;
+        &lt;div class=&quot;fus-button fus-button-outline_primary&quot;&gt;Outline button primary&lt;/div&gt;
+        &lt;div class=&quot;fus-underline-button&quot;&gt;Underline button&lt;/div&gt;
+    </code></pre><h2 class="demo-title">Price cards</h2><div><div class="fus-plan-card"><div class="fus-plan-card__title">Enterprise</div><div class="fus-plan-card__price">$49<div class="fus-plan-card__price-period">/month</div></div><div class="fus-plan-card__features"><div>All features in <span>Premium</span></div><div>Realtime overview</div><div>Mobile app</div></div><a href="#" class="fus-plan-card__button fus-button fus-button-outline_primary">Get Started</a></div><div class="fus-plan-card fus-plan-card_selected"><div class="fus-plan-card__title">Premium</div><div class="fus-plan-card__price">$29<div class="fus-plan-card__price-period">/month</div></div><div class="fus-plan-card__features"><div>Dashboard & Analysis</div><div>Premium Support</div><div>Tracking Service</div></div><a href="#" class="fus-plan-card__button fus-button fus-button_light">Get Started</a></div></div><h2 class="demo-title">Price cards Usage</h2><pre><code>
+        &lt;div class=&quot;fus-plan-card&quot;&gt;
+            &lt;div class=&quot;fus-plan-card__title&quot;&gt;Enterprise&lt;/div&gt;
+            &lt;div class=&quot;fus-plan-card__price&quot;&gt;
+                    $49&lt;div class=&quot;fus-plan-card__price-period&quot;&gt;/month&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;fus-plan-card__features&quot;&gt;
+                    &lt;div&gt;All features in &lt;span&gt;Premium&lt;/span&gt;&lt;/div&gt;
+                    &lt;div&gt;Realtime overview&lt;/div&gt;
+                    &lt;div&gt;Mobile app&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;a href=&quot;#&quot; class=&quot;fus-plan-card__button fus-button fus-button-outline_primary&quot;&gt;Get Started&lt;/a&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;fus-plan-card fus-plan-card_selected&quot;&gt;
+            &lt;div class=&quot;fus-plan-card__title&quot;&gt;Premium&lt;/div&gt;
+            &lt;div class=&quot;fus-plan-card__price&quot;&gt;
+                    $29&lt;div class=&quot;fus-plan-card__price-period&quot;&gt;/month&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;fus-plan-card__features&quot;&gt;
+                    &lt;div&gt;Dashboard &amp; Analysis&lt;/div&gt;
+                    &lt;div&gt;Premium Support&lt;/div&gt;
+                    &lt;div&gt;Tracking Service&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;a href=&quot;#&quot; class=&quot;fus-plan-card__button fus-button fus-button_light&quot;&gt;Get Started&lt;/a&gt;
+        &lt;/div&gt;
+    </code></pre><h2 class="demo-title">Blog article</h2><div class="fus-article-snippet"><div class="fus-article-snippet__image"><img src="assets/img/image.png" alt="Image"></div><div class="blog__row-content-body fus-article-snippet__body"><div class="fus-article-snippet__title">Introducing Fusely Engage</div><div class="fus-article-snippet__text">We’re happy to announce the Fusely Engage. The first growth automation platform designed for the digital interactions.</div><a href="#" class="fus-article-snippet__button-underline fus-underline-button">Read more</a></div></div><h2 class="demo-title">Blog article Usage</h2><pre><code>
+        &lt;div class=&quot;fus-article-snippet&quot;&gt;
+            &lt;div class=&quot;fus-article-snippet__image&quot;&gt;
+                    &lt;img src=&quot;assets/image.png&quot; alt=&quot;Image&quot;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;blog__row-content-body fus-article-snippet__body&quot;&gt;
+                    &lt;div class=&quot;fus-article-snippet__title&quot;&gt;Introducing Fusely Engage&lt;/div&gt;
+                    &lt;div class=&quot;fus-article-snippet__text&quot;&gt;
+                        We&rsquo;re happy to announce the Fusely Engage.
+                        The first growth automation platform designed for the digital interactions.
+                    &lt;/div&gt;
+                    &lt;a href=&quot;#&quot; class=&quot;fus-article-snippet__button-underline fus-underline-button&quot;&gt;Read more&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    </code></pre><h2 class="demo-title">Kit color palette in Sass with pick-color function</h2><pre><code>
+        $fusely-colors: (
+            'primary': (
+                '500': #5952D1,
+                '400': #6C63FF,
+                '300': #9E99FF,
+                '200': #C5C2FF,
+                '100': #ECEBFF
+            ),
+            'secondary': (
+                '500': #FC4A6E,
+                '400': #FD6584,
+                '300': #FD9BAE,
+                '200': #FED7DF,
+                '100': #FEEBEF
+            ),
+            'neutral': (
+                '500': #2F2E41,
+                '400': #717082,
+                '300': #9893A3,
+                '200': #CFCFDE,
+                '100': #FFFFFF
+            )
+        );
+
+        
+        // Parameters and function to set colors
+
+        $fusely-color-key: '400' !default;
+
+        $fusely-opacity: (
+            'light': 0.8, // opacity used with lighter colors
+            'dark': 0.4,  // opacity used with darker colors
+        );
+
+        @function fusely-color(
+            $name: 'primary',
+            $variant: $fusely-color-key,
+            $opacity: 1
+        ) {
+            $color: null;
+
+            // Get the color spectrum
+            $color-spectrum: map-get($fusely-colors, $name);
+
+            // Get the color variant
+            @if $color-spectrum {
+                $color: map-get($color-spectrum, $variant);
+            }
+
+            // Get the alpha setting
+            $alpha: if(type-of($opacity) == 'number', $opacity, map-get($scotch-opacity, $opacity));
+        
+            // Set the alpha of the color
+            @if $alpha {
+                $color: rgba($color, $alpha);
+            }
+
+            @return $color;
+        }
+    </code></pre><h2 class="demo-title">Example of palette color usage in Sass</h2><pre><code>
+        color: fusely-color('neutral', '500');
+    </code></pre></body></html>
