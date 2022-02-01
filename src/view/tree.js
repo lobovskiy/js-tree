@@ -1,21 +1,24 @@
-import tree from '../api/tree.js'
+function createBranch(arr) {
+  if (arr?.length) {
+    const branch = document.createElement('ul');
+    const nodes = arr.map(createNode);
 
-console.log(tree);
+    branch.append(...nodes);
 
-const wrapper = document.getElementById('theTree');
-
-function renderTree(arr) {
-    const list = document.createElement('ul');
-    console.log(list);
-    arr.forEach(treeNode => {
-        const listItem = document.createElement('li');
-        listItem.append(treeNode.name);
-        list.append(listItem);
-        if (treeNode.child) {
-            listItem.append(renderTree(treeNode.child));
-        }
-    })
-    return list;
+    return branch;
+  }
 }
 
-wrapper.append(renderTree(tree));
+function createNode(item) {
+  if (item) {
+    const node = document.createElement('li');
+    item.name && node.append(item.name);
+
+    const childBranch = createBranch(item.child);
+    childBranch && node.append(childBranch);
+    
+    return node;
+  }
+}
+
+export { createBranch };
