@@ -21,4 +21,14 @@ function getSimpleTree() {
   return TreeGen.generate(config);
 }
 
-export { getSimpleTree };
+function getAsyncTree() {
+  return new Promise((resolve, reject) => {
+
+  setTimeout(() => {
+    resolve(getSimpleTree());
+  }, 2000);
+
+});
+}
+
+export { getSimpleTree, getAsyncTree };

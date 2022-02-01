@@ -5,3 +5,19 @@ a, a:visited{text-decoration:none;}
     margin: 0 auto;
     max-width: 1280px;
 }
+
+.btn {
+    display: inline-block;
+	padding: 16px 30px;
+	border: 1px solid transparent;
+	border-radius: 2px;
+	cursor: pointer;
+	font-size: 14px;
+	line-height: initial;
+	font-weight: 700;
+
+    &_dark {
+		background-color: cadetblue;
+		border-color: gray;
+	}
+}

@@ -1,8 +1,15 @@
-import { getSimpleTree } from '../api/tree.js';
+import { getAsyncTree } from '../api/tree.js';
 import { createBranch } from '../view/tree.js';
 
-const simpleTreeData = getSimpleTree();
-const tree = createBranch(simpleTreeData);
+const wrapper = document.getElementById('the-tree');
+const button = document.getElementById('load-button');
 
-const wrapper = document.getElementById('theTree');
-wrapper.append(tree);
+button.addEventListener('click', loadTree);
+
+function loadTree() {
+  getAsyncTree().then(asyncTreeData => {
+    const tree = createBranch(asyncTreeData);
+
+    wrapper.append(tree);
+  });
+}
