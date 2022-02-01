@@ -7,7 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src',
+  entry: ['babel-polyfill', './src'],
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
