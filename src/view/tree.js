@@ -21,4 +21,9 @@ function createNode(item) {
   }
 }
 
-export { createBranch };
+function renderTree(tree, container) {
+  container.textContent = '';
+  container.append(tree);
+}
+
+export { createBranch, renderTree };

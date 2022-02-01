@@ -7,11 +7,14 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: ['babel-polyfill', './src'],
+  entry: {
+    lib: './src/lib',
+    main: ['babel-polyfill', './src'],
+  },
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
   watch: false,
   devServer: {
@@ -34,6 +37,13 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           { loader: 'css-loader', options: { sourceMap: false } },
           'sass-loader',
+        ]
+      },
+      {
+        test: /\.css$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          { loader: 'css-loader', options: { sourceMap: false } }
         ]
       },
       {
@@ -65,7 +75,7 @@ module.exports = {
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'style.css',
+      filename: '[name].css',
     }),
     new HtmlWebpackPlugin({
       title: 'JS Tree',
@@ -80,7 +90,9 @@ module.exports = {
   optimization: {
     minimize: true,
     minimizer: [
-      new CssMinimizerPlugin(),
+      new CssMinimizerPlugin({
+        exclude: 'lib.css',
+      }),
     ],
   },
 };

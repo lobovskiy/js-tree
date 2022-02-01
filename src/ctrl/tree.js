@@ -1,5 +1,5 @@
 import { getSimpleTree, getAsyncTree } from '../api/tree.js';
-import { createBranch } from '../view/tree.js';
+import { createBranch, renderTree } from '../view/tree.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   const wrapperSimpleTree = document.getElementById('simple-tree');
@@ -7,23 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadButton1 = document.getElementById('load-button1');
 
   function createSimpleTree() {
-    const simpleTreeData = getSimpleTree();
-    return createBranch(simpleTreeData);
+    return createBranch(getSimpleTree());
   }
 
-  async function createAsyncTree() {
-    const asyncTreeData = await getAsyncTree();
-    return createBranch(asyncTreeData);
-  }
-
-  function renderTree(tree, container) {
-    container.textContent = '';
-    container.append(tree);
-  }
-
-  async function renderAsyncTree() {
-    const asyncTree = await createAsyncTree();
-    renderTree(asyncTree, wrapperAsyncTree1);
+  function renderAsyncTree() {
+    getAsyncTree().then(asyncTreeData => {
+      const asyncTree = createBranch(asyncTreeData);
+      renderTree(asyncTree, wrapperAsyncTree1);
+    });
   }
 
   renderTree(createSimpleTree(), wrapperSimpleTree);
