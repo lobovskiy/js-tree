@@ -1,3 +1,3 @@
-import './view/simple.js';
+import './ctrl/tree.js';
 
 import './css/style.scss';
