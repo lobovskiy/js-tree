@@ -50,14 +50,14 @@ module.exports = {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
         generator: {
-          filename: 'assets/img/[name][hash][ext]'
+          filename: 'assets/img/[name].[hash].[ext]'
         }
       },
       {
         test: /\.(woff(2)?|eot|ttf|otf)$/i,
         type: 'asset/resource',
         generator: {
-          filename: 'assets/font/[name][hash][ext]'
+          filename: 'assets/font/[name].[hash].[ext]'
         }
       },
       {
@@ -83,6 +83,7 @@ module.exports = {
       filename: 'index.html',
     }),
     new CleanWebpackPlugin(),
+    // devServer
     new webpack.HotModuleReplacementPlugin(),
   ],
 

@@ -17,4 +17,52 @@ a, a:visited{text-decoration:none;}
     display: flex;
     align-items: start;
     flex-direction: column;
+    font-size: 16px;
+}
+
+.branch {
+  padding: 0 0 0 1rem;
+  font-size: 16px;
+
+  &__node {
+    list-style-type: none;
+
+    &-name {
+      display: inline-block;
+      padding: 5px 0 0;
+      list-style-type: none;
+    }
+
+    &-marker {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      text-align: center;
+      color: #98a2b3;
+  
+      &_expanded {
+        cursor: pointer;
+        background: url(../assets/icons/expand-arrow-off.svg) no-repeat;
+      }
+    }
+
+    &-trail {
+      display: inline-block;
+      width: 1rem;
+      height: 1.5rem;
+      margin: -0.5rem 0 -0.5rem -1rem;
+      background: url(../assets/icons/tree-l1-child.svg) no-repeat;
+      background-position: center;
+
+      &_level2 {
+        margin: -0.5rem 1rem -0.5rem -2rem;
+        background: url(../assets/icons/trail.svg) no-repeat;
+      }
+
+      &_level3 {
+        margin: -0.5rem 2rem -0.5rem -3rem;
+        background: url(../assets/icons/trail.svg) no-repeat;
+      }
+    }
+  }
 }
