@@ -47,9 +47,9 @@ $trail-level3: null;
       text-align: center;
       color: #98a2b3;
   
-      &_expanded {
+      &_branch {
         cursor: pointer;
-        background: url(../assets/icons/expand-arrow-off.svg) no-repeat;
+        background: url(../assets/icons/marker-branch-off.svg) no-repeat;
       }
     }
 
@@ -58,8 +58,8 @@ $trail-level3: null;
       width: 1rem;
       height: 1.5rem;
       background-position: center;
-      margin: -0.5rem 0 -0.5rem -1rem;
-      background: url(../assets/icons/tree-l1-child.svg) no-repeat;
+      margin: -0.25rem 0 -0.25rem -1rem;
+      background: url(../assets/icons/trail-item.svg) no-repeat;
       
       &_level1 {
         $trail-level1: & !global;
@@ -75,11 +75,13 @@ $trail-level3: null;
     }
 
     &_level1 {
+      // set trail for a last item on the level 1
       &:last-child {
         #{$trail-level1} {
-          background: url(../assets/icons/tree-l1-child-last.svg) no-repeat;
+          background: url(../assets/icons/trail-item-last.svg) no-repeat;
         }
 
+        // remove trails after a last level-1-item in front of all sub-items on the level 1
         #{$branch-node} {
           #{$trail-level1} {
             background: none;
@@ -89,16 +91,20 @@ $trail-level3: null;
     }
 
     &_level2 {
+      // move level-1-trail of level-2-item
       #{$trail-level1} {
-        margin: -0.5rem 1rem -0.5rem -2rem;
-        background: url(../assets/icons/trail.svg) no-repeat;
+        margin-right: 1rem;
+        margin-left: -2rem;
+        background: url(../assets/icons/trail-through.svg) no-repeat;
       }
 
+      // set trail for a last item on the level 2
       &:last-child {
         #{$trail-level2} {
-          background: url(../assets/icons/tree-l1-child-last.svg) no-repeat;
+          background: url(../assets/icons/trail-item-last.svg) no-repeat;
         }
 
+        // remove trails after a last level-2-item in front of all sub-items on the level 2
         #{$branch-node} {
           #{$trail-level2} {
             background: none;
@@ -108,25 +114,31 @@ $trail-level3: null;
     }
 
     &_level3 {
+      // move level-1-trail of level-3-item
       #{$trail-level1} {
-        margin: -0.5rem 2rem -0.5rem -3rem;
-        background: url(../assets/icons/trail.svg) no-repeat;
+        margin-right: 2rem;
+        margin-left: -3rem;
+        background: url(../assets/icons/trail-through.svg) no-repeat;
       }
 
+      // move level-2-trail of level-3-item
       #{$trail-level2} {
-        margin: -0.5rem 1rem -0.5rem -2rem;
-        background: url(../assets/icons/trail.svg) no-repeat;
+        margin-right: 1rem;
+        margin-left: -2rem;
+        background: url(../assets/icons/trail-through.svg) no-repeat;
       }
 
+      // set trail for a last item on the level 3
       &:last-child {
         #{$trail-level3} {
-          background: url(../assets/icons/tree-l1-child-last.svg) no-repeat;
+          background: url(../assets/icons/trail-item-last.svg) no-repeat;
         }
-      }
 
-      #{$branch-node} {
-        #{$trail-level2} {
-          background: none;
+        // remove trails after a last level-3-item in front of all sub-items on the level 3
+        #{$branch-node} {
+          #{$trail-level3} {
+            background: none;
+          }
         }
       }
     }
