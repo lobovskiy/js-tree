@@ -47,9 +47,9 @@ $trail-level3: null;
       text-align: center;
       color: #98a2b3;
   
-      &_branch {
+      &_expanded {
         cursor: pointer;
-        background: url(../assets/icons/marker-branch-off.svg) no-repeat;
+        background: url(../assets/icons/marker-expanded-off.svg) no-repeat;
       }
     }
 

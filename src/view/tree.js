@@ -1,3 +1,11 @@
+const nodeClass = 'branch__node',
+      nodeLevelModificatorClass = `${nodeClass}_level`,
+      nodeNameClass = `${nodeClass}-name`,
+      markerClass = `${nodeClass}-marker`,
+      markerModificatorClass = `${markerClass}_expanded`,
+      trailClass = `${nodeClass}-trail`,
+      trailLevelModificatorClass = `${trailClass}_level`;
+
 function createBranch(arr) {
   if (arr?.length) {
     const branch = document.createElement('ul');
@@ -21,7 +29,7 @@ function addName(item, className) {
 
 function addMarker() {
   const markerDiv = document.createElement('div');
-  markerDiv.classList.add('branch__node-marker');     // задать класс как переменную
+  markerDiv.classList.add(markerClass);
   return markerDiv;
 }
 
@@ -31,7 +39,7 @@ function getTrails(item) {
 
     for (let i = 1; i <= item.level; i++) {
       const trailDiv = document.createElement('div');
-      trailDiv.classList.add('branch__node-trail');   // задать класс как переменную
+      trailDiv.classList.add(trailClass);
       addTrailModificator(trailDiv, i);
       trails.push(trailDiv);
     }
@@ -41,7 +49,7 @@ function getTrails(item) {
 }
 
 function addTrailModificator(trail, level) {
-  trail.classList.add(`branch__node-trail_level${level}`);    // задать класс как переменную
+  trail.classList.add(trailLevelModificatorClass + level);
 }
 
 function addTrails(node, trails) {
@@ -52,14 +60,14 @@ function addTrails(node, trails) {
 
 function setNodeLevel(item, node) {
   if (item?.level) {
-    node.classList.add(`branch__node_level${item.level}`);      // задать класс как переменную
+    node.classList.add(nodeLevelModificatorClass + item.level);
   }
 }
 
 function createNode(item) {
   if (item) {
     const node = document.createElement('li');
-    node.classList.add('branch__node');   // задать класс как переменную
+    node.classList.add(nodeClass);
 
     // add trails
     const trails = getTrails(item);
@@ -70,7 +78,7 @@ function createNode(item) {
 
     // add marker and name
     const marker = addMarker();
-    const name = addName(item, 'branch__node-name');      // задать класс как переменную
+    const name = addName(item, nodeNameClass);
     marker && node.append(marker);
     name && node.append(name);
 
@@ -78,7 +86,7 @@ function createNode(item) {
     const childBranch = createBranch(item.child);
     if (childBranch) {
       node.append(childBranch);
-      marker.classList.add('branch__node-marker_branch');
+      marker.classList.add(markerModificatorClass);
     }
     
     return node;
