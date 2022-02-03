@@ -20,92 +20,19 @@ a, a:visited{text-decoration:none;}
     font-size: 16px;
 }
 
+$branch-node: null;
+$trail-level1: null;
+$trail-level2: null;
+$trail-level3: null;
+
 .branch {
   padding: 0 0 0 1rem;
   font-size: 16px;
 
   &__node {
+    $branch-node: & !global;
+
     list-style-type: none;
-
-    &_level1 {
-      .branch__node-trail {
-        display: inline-block;
-        width: 1rem;
-        height: 1.5rem;
-        margin: -0.5rem 0 -0.5rem -1rem;
-        background: url(../assets/icons/tree-l1-child.svg) no-repeat;
-        background-position: center;
-      }
-      
-      &:last-child {
-        .branch__node-trail_level1 {
-          background: url(../assets/icons/tree-l1-child-last.svg) no-repeat;
-        }
-
-        .branch__node_level2 {
-          .branch__node-trail_level1 {
-            background: none;
-          }
-        }
-      }
-    }
-
-    &_level2 {
-      .branch__node-trail {
-        display: inline-block;
-        width: 1rem;
-        height: 1.5rem;
-        margin: -0.5rem 1rem -0.5rem -2rem;
-        background: url(../assets/icons/trail.svg) no-repeat;
-        background-position: center;
-        
-  
-        &_level2 {
-          margin: -0.5rem 0 -0.5rem -1rem;
-          background: url(../assets/icons/tree-l1-child.svg) no-repeat;
-        }
-      }
-
-      &:last-child {
-        .branch__node-trail_level2 {
-          background: url(../assets/icons/tree-l1-child-last.svg) no-repeat;
-        }
-
-        .branch__node_level3 {
-          .branch__node-trail_level2 {
-            background: none;
-          }
-        }
-      }
-    }
-
-    &_level3 {
-      .branch__node-trail {
-        display: inline-block;
-        width: 1rem;
-        height: 1.5rem;
-        margin: -0.5rem 2rem -0.5rem -3rem;
-        background: url(../assets/icons/trail.svg) no-repeat;
-        background-position: center;
-        
-  
-        &_level2 {
-          margin: -0.5rem 1rem -0.5rem -2rem;
-          background: url(../assets/icons/trail.svg) no-repeat;
-        }
-
-        &_level3 {
-          margin: -0.5rem 0 -0.5rem -1rem;
-          background: url(../assets/icons/tree-l1-child.svg) no-repeat;
-        }
-      }
-
-      &:last-child {
-        .branch__node-trail_level3 {
-          background: url(../assets/icons/tree-l1-child-last.svg) no-repeat;
-        }
-      }
-    }
 
     &-name {
       display: inline-block;
@@ -123,6 +50,84 @@ a, a:visited{text-decoration:none;}
       &_expanded {
         cursor: pointer;
         background: url(../assets/icons/expand-arrow-off.svg) no-repeat;
+      }
+    }
+
+    &-trail {
+      display: inline-block;
+      width: 1rem;
+      height: 1.5rem;
+      background-position: center;
+      margin: -0.5rem 0 -0.5rem -1rem;
+      background: url(../assets/icons/tree-l1-child.svg) no-repeat;
+      
+      &_level1 {
+        $trail-level1: & !global;
+      }
+
+      &_level2 {
+        $trail-level2: & !global;
+      }
+
+      &_level3 {
+        $trail-level3: & !global;
+      }
+    }
+
+    &_level1 {
+      &:last-child {
+        #{$trail-level1} {
+          background: url(../assets/icons/tree-l1-child-last.svg) no-repeat;
+        }
+
+        #{$branch-node} {
+          #{$trail-level1} {
+            background: none;
+          }
+        }
+      }
+    }
+
+    &_level2 {
+      #{$trail-level1} {
+        margin: -0.5rem 1rem -0.5rem -2rem;
+        background: url(../assets/icons/trail.svg) no-repeat;
+      }
+
+      &:last-child {
+        #{$trail-level2} {
+          background: url(../assets/icons/tree-l1-child-last.svg) no-repeat;
+        }
+
+        #{$branch-node} {
+          #{$trail-level2} {
+            background: none;
+          }
+        }
+      }
+    }
+
+    &_level3 {
+      #{$trail-level1} {
+        margin: -0.5rem 2rem -0.5rem -3rem;
+        background: url(../assets/icons/trail.svg) no-repeat;
+      }
+
+      #{$trail-level2} {
+        margin: -0.5rem 1rem -0.5rem -2rem;
+        background: url(../assets/icons/trail.svg) no-repeat;
+      }
+
+      &:last-child {
+        #{$trail-level3} {
+          background: url(../assets/icons/tree-l1-child-last.svg) no-repeat;
+        }
+      }
+
+      #{$branch-node} {
+        #{$trail-level2} {
+          background: none;
+        }
       }
     }
   }
