@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function createSimpleTree() {
     const simpleTree = createBranch(getSimpleTree());
-    console.dir(simpleTree);
     return simpleTree;
   }
 
