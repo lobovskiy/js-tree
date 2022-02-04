@@ -33,4 +33,95 @@ function getAsyncTree() {
   });
 }
 
-export { getSimpleTree, getAsyncTree };
+
+
+function getAsyncTreeV3() {
+  const originalTreeData = getSimpleTree();
+  const statusDiv = document.getElementById('loading-status');
+  let treeData = [];
+
+  function getParents(treeArr) {
+    let parentNodes = [];
+
+    treeArr.forEach(node => {
+      const { name, level, id } = node;
+      parentNodes.push({ name, level, id });
+    });
+    
+    return parentNodes;
+  }
+
+  return new Promise((resolve, reject) => {
+    
+    treeData = getParents(originalTreeData);
+    statusDiv.textContent = 'getting source data...';
+
+    setTimeout(() => {
+      resolve(treeData);
+    }, 1000);
+
+  })
+  .then(treeData => {
+    return new Promise((resolve, reject) => {
+      
+      function findChildren(id) {
+        let childArr = [];
+        originalTreeData.forEach(node => {
+          if (node.id == id) {
+            childArr = getParents(node.child);
+          }
+        });
+
+        return childArr;
+      }
+
+      function getChildNodes(treeArr) {
+
+        const delay = node => {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              node.child = findChildren(node.id);
+              resolve();
+            }, 1000);
+          });
+        }
+
+        const doNextPromise = (d) => {
+          delay(treeArr[d])
+            .then(() => {
+              console.log(d + 1);
+              statusDiv.textContent = `parsing parents: ${d + 1}/${treeArr.length}`;
+              d++;
+              if (d < treeArr.length) {
+                doNextPromise(d)
+              } else {
+
+                setTimeout(() => {
+                  resolve(treeData);
+                }, 1000);
+              }
+            });
+        }
+        doNextPromise(0);
+
+      }
+
+      getChildNodes(treeData);
+  
+    })
+  })
+  .then(treeData => {
+    return new Promise((resolve, reject) => {
+      
+      statusDiv.textContent = 'creating tree...';
+      setTimeout(() => {
+        console.log(treeData);
+        statusDiv.textContent = 'done!';
+        resolve(treeData);
+      }, 1000);
+  
+    })
+  });
+}
+
+export { getSimpleTree, getAsyncTree, getAsyncTreeV3 };

@@ -18,16 +18,16 @@ function createBranch(arr) {
   }
 }
 
-function addName(item, className) {
+function createName(item) {
   if (item.name) {
     const nameDiv = document.createElement('div');
     nameDiv.append(item.name);
-    nameDiv.classList.add(className);
+    nameDiv.classList.add(nodeNameClass);
     return nameDiv;
   }
 }
 
-function addMarker() {
+function createMarker() {
   const markerDiv = document.createElement('div');
   markerDiv.classList.add(markerClass);
   return markerDiv;
@@ -58,7 +58,7 @@ function addTrails(node, trails) {
   }
 }
 
-function setNodeLevel(item, node) {
+function setNodeLevelClass(item, node) {
   if (item?.level) {
     node.classList.add(nodeLevelModificatorClass + item.level);
   }
@@ -69,16 +69,16 @@ function createNode(item) {
     const node = document.createElement('li');
     node.classList.add(nodeClass);
 
+    // set class of level
+    setNodeLevelClass(item, node);
+
     // add trails
     const trails = getTrails(item);
     addTrails(node, trails);
 
-    // add level class
-    setNodeLevel(item, node);
-
     // add marker and name
-    const marker = addMarker();
-    const name = addName(item, nodeNameClass);
+    const marker = createMarker();
+    const name = createName(item);
     marker && node.append(marker);
     name && node.append(name);
 
@@ -86,7 +86,7 @@ function createNode(item) {
     const childBranch = createBranch(item.child);
     if (childBranch) {
       node.append(childBranch);
-      marker.classList.add(markerModificatorClass);
+      marker && marker.classList.add(markerModificatorClass);
     }
     
     return node;

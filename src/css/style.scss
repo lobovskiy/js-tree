@@ -10,10 +10,11 @@ a, a:visited{text-decoration:none;}
     display: flex;
     align-items: start;
     margin-top: 20px;
+    justify-content: space-between;
 }
 
 .trees__column {
-    flex: 0 0 50%;
+    flex: 0 0 33.33%;
     display: flex;
     align-items: start;
     flex-direction: column;
