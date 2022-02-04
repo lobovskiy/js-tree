@@ -40,20 +40,26 @@ function getAsyncTreeV3() {
   const statusDiv = document.getElementById('loading-status');
   let treeData = [];
 
-  function getParents(treeArr) {
-    let parentNodes = [];
+  function getRootNodes(branchData) {
+    let rootNodes = [];
 
-    treeArr.forEach(node => {
+    branchData.forEach(node => {
       const { name, level, id } = node;
-      parentNodes.push({ name, level, id });
+      rootNodes.push({ name, level, id });
     });
     
-    return parentNodes;
+    return rootNodes;
   }
+
+  function getChildrenById(id) {
+    
+  }
+
+
 
   return new Promise((resolve, reject) => {
     
-    treeData = getParents(originalTreeData);
+    treeData = getRootNodes(originalTreeData);
     statusDiv.textContent = 'getting source data...';
 
     setTimeout(() => {
@@ -68,7 +74,7 @@ function getAsyncTreeV3() {
         let childArr = [];
         originalTreeData.forEach(node => {
           if (node.id == id) {
-            childArr = getParents(node.child);
+            childArr = getRootNodes(node.child);
           }
         });
 
@@ -88,19 +94,19 @@ function getAsyncTreeV3() {
 
         const doNextPromise = (d) => {
           delay(treeArr[d])
-            .then(() => {
-              console.log(d + 1);
-              statusDiv.textContent = `parsing parents: ${d + 1}/${treeArr.length}`;
-              d++;
-              if (d < treeArr.length) {
-                doNextPromise(d)
-              } else {
+          .then(() => {
+            console.log(d + 1);
+            statusDiv.textContent = `parsing parents: ${d + 1}/${treeArr.length}`;
+            d++;
+            if (d < treeArr.length) {
+              doNextPromise(d)
+            } else {
 
-                setTimeout(() => {
-                  resolve(treeData);
-                }, 1000);
-              }
-            });
+              setTimeout(() => {
+                resolve(treeData);
+              }, 1000);
+            }
+          });
         }
         doNextPromise(0);
 
