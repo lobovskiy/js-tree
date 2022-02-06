@@ -98,6 +98,7 @@ function getAsyncTreeV3() {
 
   })
   .then(treeData => {
+    statusDiv.textContent = 'parsing tree...';
     return new Promise((resolve, reject) => {
       let levelCounter = 0;
 
@@ -109,7 +110,7 @@ function getAsyncTreeV3() {
               levelCounter++;
               node.child = getChildrenFromOriginalTree(node.id);
               getChildNodes(node.child, resolve);
-            }, 300);
+            }, 100);
           });
         }
 
@@ -119,11 +120,11 @@ function getAsyncTreeV3() {
             statusDivs[levelCounter].textContent = '';
             previousResolve();
           } else {
-            statusDivs[levelCounter].textContent = `parsed level ${levelCounter} items: ${d + 1}/${treeArr.length}`;
+            statusDivs[levelCounter].style.width = `${(d + 1) * 100 / treeArr.length}%`;
             delay(treeArr[d])
             .then(() => {
               // console.log(levelCounter);
-              statusDivs[levelCounter].textContent = `parsed: ${d + 1}/${treeArr.length}`;
+              statusDivs[levelCounter].style.width = `${(d + 1) * 100 / treeArr.length}%`;
               d++;
               if (d < treeArr.length) {
                 doNextPromise(d)
@@ -131,9 +132,10 @@ function getAsyncTreeV3() {
                 statusDivs[levelCounter].textContent = 'creating branch...';
                 setTimeout(() => {
                   statusDivs[levelCounter].textContent = '';
+                  statusDivs[levelCounter].style.width = '0%';
                   levelCounter--;
                   previousResolve(treeArr);
-                }, 300);
+                }, 500);
               }
             });
           }
