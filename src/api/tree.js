@@ -38,9 +38,9 @@ function getAsyncTree() {
 function getAsyncTreeV3() {
   const originalTreeData = getSimpleTree();
   const statusDiv = document.getElementById('loading-status');
-  let treeData = [];
+  let myTreeData = [];
 
-  function getRootNodes(branchData) {
+  function createMyBranchNodes(branchData) {
     let rootNodes = [];
 
     branchData.forEach(node => {
@@ -51,44 +51,53 @@ function getAsyncTreeV3() {
     return rootNodes;
   }
 
-  function getChildrenById(id) {
-    
+  const getChildren = treeData => id => {
+    let childrenArr = [];
+
+    function getChildren(tree) {
+
+      tree.forEach(node => {
+        if (node.id == id) {
+          childrenArr = createMyBranchNodes(node.child);
+          return;     // выйдет из всей функции getChildrenTree или только из forEach??
+        }
+
+        node?.child?.length && getChildren(node.child);
+      });
+    }
+
+    getChildren(treeData);
+    return childrenArr;
   }
+
+  const getChildrenFromOriginalTree = getChildren(originalTreeData);
+
+
 
 
 
   return new Promise((resolve, reject) => {
     
-    treeData = getRootNodes(originalTreeData);
+    // get all data from API
+    myTreeData = createMyBranchNodes(originalTreeData);
     statusDiv.textContent = 'getting source data...';
 
     setTimeout(() => {
-      resolve(treeData);
+      resolve(myTreeData);
     }, 1000);
 
   })
   .then(treeData => {
     return new Promise((resolve, reject) => {
-      
-      function findChildren(id) {
-        let childArr = [];
-        originalTreeData.forEach(node => {
-          if (node.id == id) {
-            childArr = getRootNodes(node.child);
-          }
-        });
-
-        return childArr;
-      }
 
       function getChildNodes(treeArr) {
 
         const delay = node => {
           return new Promise((resolve) => {
             setTimeout(() => {
-              node.child = findChildren(node.id);
+              node.child = getChildrenFromOriginalTree(node.id);
               resolve();
-            }, 1000);
+            }, 300);
           });
         }
 
@@ -103,6 +112,7 @@ function getAsyncTreeV3() {
             } else {
 
               setTimeout(() => {
+                statusDiv.textContent = 'creating tree...';
                 resolve(treeData);
               }, 1000);
             }
@@ -118,8 +128,6 @@ function getAsyncTreeV3() {
   })
   .then(treeData => {
     return new Promise((resolve, reject) => {
-      
-      statusDiv.textContent = 'creating tree...';
       setTimeout(() => {
         console.log(treeData);
         statusDiv.textContent = 'done!';
