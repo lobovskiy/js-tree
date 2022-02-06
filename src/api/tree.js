@@ -43,10 +43,12 @@ function getAsyncTreeV3() {
   function createMyBranchNodes(branchData) {
     let rootNodes = [];
 
-    branchData.forEach(node => {
-      const { name, level, id } = node;
-      rootNodes.push({ name, level, id });
-    });
+    if (branchData?.length) {
+      branchData.forEach(node => {
+        const { name, level, id } = node;
+        rootNodes.push({ name, level, id });
+      });
+    }
     
     return rootNodes;
   }
@@ -90,39 +92,43 @@ function getAsyncTreeV3() {
   .then(treeData => {
     return new Promise((resolve, reject) => {
 
-      function getChildNodes(treeArr) {
+      function getChildNodes(treeArr, previousResolve) {
 
         const delay = node => {
           return new Promise((resolve) => {
             setTimeout(() => {
+              console.log(node);
               node.child = getChildrenFromOriginalTree(node.id);
-              resolve();
+              getChildNodes(node.child, resolve);
             }, 300);
           });
         }
 
         const doNextPromise = (d) => {
-          delay(treeArr[d])
-          .then(() => {
-            console.log(d + 1);
-            statusDiv.textContent = `parsing parents: ${d + 1}/${treeArr.length}`;
-            d++;
-            if (d < treeArr.length) {
-              doNextPromise(d)
-            } else {
+          if (!treeArr.length) {
+            previousResolve();
+          } else {
+            delay(treeArr[d])
+            .then(() => {
+              statusDiv.textContent = `parsing: ${d + 1}/${treeArr.length}`;
+              d++;
+              if (d < treeArr.length) {
+                doNextPromise(d)
+              } else {
 
-              setTimeout(() => {
-                statusDiv.textContent = 'creating tree...';
-                resolve(treeData);
-              }, 1000);
-            }
-          });
+                setTimeout(() => {
+                  statusDiv.textContent = 'creating tree...';
+                  previousResolve(treeArr);
+                }, 1000);
+              }
+            });
+          }
         }
         doNextPromise(0);
 
       }
 
-      getChildNodes(treeData);
+      getChildNodes(treeData, resolve);
   
     })
   })
