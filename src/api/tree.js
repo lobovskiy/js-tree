@@ -39,6 +39,12 @@ function getAsyncTreeV3() {
   const originalTreeData = getSimpleTree();
   const statusDiv = document.getElementById('loading-status');
   let myTreeData = [];
+  const statusDivs = [
+    document.getElementById('status-level0'),
+    document.getElementById('status-level1'),
+    document.getElementById('status-level2'),
+    document.getElementById('status-level3'),
+  ];
 
   function createMyBranchNodes(branchData) {
     let rootNodes = [];
@@ -79,6 +85,8 @@ function getAsyncTreeV3() {
 
 
   return new Promise((resolve, reject) => {
+
+    statusDivs.forEach(div => div.textContent = '');
     
     // get all data from API
     myTreeData = createMyBranchNodes(originalTreeData);
@@ -91,13 +99,14 @@ function getAsyncTreeV3() {
   })
   .then(treeData => {
     return new Promise((resolve, reject) => {
+      let levelCounter = 0;
 
       function getChildNodes(treeArr, previousResolve) {
 
         const delay = node => {
           return new Promise((resolve) => {
             setTimeout(() => {
-              console.log(node);
+              levelCounter++;
               node.child = getChildrenFromOriginalTree(node.id);
               getChildNodes(node.child, resolve);
             }, 300);
@@ -106,26 +115,31 @@ function getAsyncTreeV3() {
 
         const doNextPromise = (d) => {
           if (!treeArr.length) {
+            levelCounter--;
+            statusDivs[levelCounter].textContent = '';
             previousResolve();
           } else {
+            statusDivs[levelCounter].textContent = `parsed level ${levelCounter} items: ${d + 1}/${treeArr.length}`;
             delay(treeArr[d])
             .then(() => {
-              statusDiv.textContent = `parsing: ${d + 1}/${treeArr.length}`;
+              // console.log(levelCounter);
+              statusDivs[levelCounter].textContent = `parsed: ${d + 1}/${treeArr.length}`;
               d++;
               if (d < treeArr.length) {
                 doNextPromise(d)
               } else {
-
+                statusDivs[levelCounter].textContent = 'creating branch...';
                 setTimeout(() => {
-                  statusDiv.textContent = 'creating tree...';
+                  statusDivs[levelCounter].textContent = '';
+                  levelCounter--;
                   previousResolve(treeArr);
-                }, 1000);
+                }, 300);
               }
             });
           }
         }
-        doNextPromise(0);
 
+        doNextPromise(0);
       }
 
       getChildNodes(treeData, resolve);
@@ -134,6 +148,7 @@ function getAsyncTreeV3() {
   })
   .then(treeData => {
     return new Promise((resolve, reject) => {
+      statusDiv.textContent = 'creating tree...';
       setTimeout(() => {
         console.log(treeData);
         statusDiv.textContent = 'done!';
