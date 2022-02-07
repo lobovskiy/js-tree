@@ -146,6 +146,18 @@ $trail-level3: null;
   }
 }
 
+#loading-status {
+  margin: 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(56, 116, 83);
+}
+
+.status-section {
+  display: none;
+  width: 100%;
+}
+
 .progress-bar {
   display: block;
   margin: 2px 0;

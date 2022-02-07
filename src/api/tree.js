@@ -59,7 +59,7 @@ function getAsyncTreeV3() {
     return rootNodes;
   }
 
-  const getChildren = treeData => id => {
+  const getChildrenFromTreeById = treeData => id => {
     let childrenArr = [];
 
     function getChildren(tree) {
@@ -78,7 +78,7 @@ function getAsyncTreeV3() {
     return childrenArr;
   }
 
-  const getChildrenFromOriginalTree = getChildren(originalTreeData);
+  const getChildrenFromOriginalTree = getChildrenFromTreeById(originalTreeData);
 
 
 
@@ -120,6 +120,7 @@ function getAsyncTreeV3() {
             statusDivs[levelCounter].textContent = '';
             previousResolve();
           } else {
+            document.querySelectorAll('.status-section')[levelCounter].style.display = 'block';
             statusDivs[levelCounter].style.width = `${(d + 1) * 100 / treeArr.length}%`;
             delay(treeArr[d])
             .then(() => {
@@ -131,6 +132,7 @@ function getAsyncTreeV3() {
               } else {
                 statusDivs[levelCounter].textContent = 'creating branch...';
                 setTimeout(() => {
+                  document.querySelectorAll('.status-section')[levelCounter].style.display = 'none';
                   statusDivs[levelCounter].textContent = '';
                   statusDivs[levelCounter].style.width = '0%';
                   levelCounter--;

@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderAsyncTreeV3() {
+    wrapperAsyncTree2.textContent = '';
     getAsyncTreeV3().then(asyncTreeData => {
       const asyncTree = createBranch(asyncTreeData);
       renderTree(asyncTree, wrapperAsyncTree2);
