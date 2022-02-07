@@ -87,7 +87,7 @@ function getAsyncTreeV3() {
 
   return new Promise((resolve, reject) => {
 
-    statusDivs.forEach(div => div.textContent = '');
+    // statusDivs.forEach(div => div.textContent = '');
     
     // get all data from API
     myTreeData = createMyBranchNodes(originalTreeData);
@@ -101,7 +101,7 @@ function getAsyncTreeV3() {
   .then(treeData => {
     statusDiv.textContent = 'parsing tree...';
     return new Promise((resolve, reject) => {
-      // let levelCounter = 0;
+      let levelCounter = 0;
 
       // function getChildNodes(treeArr, previousResolve) {
 
@@ -153,23 +153,23 @@ function getAsyncTreeV3() {
         if (!treeArr.length) {
           previousResolve();
         } else {
-      
           Promise.allSettled(treeArr.map(node => {
             return new Promise(resolve => {
               setTimeout(() => {
                 node.child = getChildrenFromOriginalTree(node.id);
                 getChildNodes(node.child, resolve);
-                console.log(node);
+                // console.log(node);
               }, 1000);
             });
-          })).then(() => previousResolve(treeArr));
-
+          })).then(() => {
+            previousResolve(treeArr);
+          });
         }
       }
 
       getChildNodes(treeData, resolve);
   
-    })
+    });
   })
   .then(treeData => {
     return new Promise((resolve, reject) => {
