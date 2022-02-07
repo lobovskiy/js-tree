@@ -37,6 +37,7 @@ function getAsyncTree() {
 
 function getAsyncTreeV3() {
   const originalTreeData = getSimpleTree();
+
   const statusDiv = document.getElementById('loading-status');
   let myTreeData = [];
   const statusDivs = [
@@ -100,50 +101,70 @@ function getAsyncTreeV3() {
   .then(treeData => {
     statusDiv.textContent = 'parsing tree...';
     return new Promise((resolve, reject) => {
-      let levelCounter = 0;
+      // let levelCounter = 0;
+
+      // function getChildNodes(treeArr, previousResolve) {
+
+      //   const delay = node => {
+      //     return new Promise((resolve) => {
+      //       setTimeout(() => {
+      //         levelCounter++;
+      //         node.child = getChildrenFromOriginalTree(node.id);
+      //         getChildNodes(node.child, resolve);
+      //       }, 100);
+      //     });
+      //   }
+
+      //   const doNextPromise = (d) => {
+      //     if (!treeArr.length) {
+      //       levelCounter--;
+      //       statusDivs[levelCounter].textContent = '';
+      //       previousResolve();
+      //     } else {
+      //       document.querySelectorAll('.status-section')[levelCounter].style.display = 'block';
+      //       statusDivs[levelCounter].style.width = `${(d + 1) * 100 / treeArr.length}%`;
+      //       delay(treeArr[d])
+      //       .then(() => {
+      //         // console.log(levelCounter);
+      //         statusDivs[levelCounter].style.width = `${(d + 1) * 100 / treeArr.length}%`;
+      //         d++;
+      //         if (d < treeArr.length) {
+      //           doNextPromise(d)
+      //         } else {
+      //           statusDivs[levelCounter].textContent = 'creating branch...';
+      //           setTimeout(() => {
+      //             document.querySelectorAll('.status-section')[levelCounter].style.display = 'none';
+      //             statusDivs[levelCounter].textContent = '';
+      //             statusDivs[levelCounter].style.width = '0%';
+      //             levelCounter--;
+      //             previousResolve(treeArr);
+      //           }, 500);
+      //         }
+      //       });
+      //     }
+      //   }
+
+      //   doNextPromise(0);
+      // }
+
+      // getChildNodes(treeData, resolve);
 
       function getChildNodes(treeArr, previousResolve) {
-
-        const delay = node => {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              levelCounter++;
-              node.child = getChildrenFromOriginalTree(node.id);
-              getChildNodes(node.child, resolve);
-            }, 100);
-          });
-        }
-
-        const doNextPromise = (d) => {
-          if (!treeArr.length) {
-            levelCounter--;
-            statusDivs[levelCounter].textContent = '';
-            previousResolve();
-          } else {
-            document.querySelectorAll('.status-section')[levelCounter].style.display = 'block';
-            statusDivs[levelCounter].style.width = `${(d + 1) * 100 / treeArr.length}%`;
-            delay(treeArr[d])
-            .then(() => {
-              // console.log(levelCounter);
-              statusDivs[levelCounter].style.width = `${(d + 1) * 100 / treeArr.length}%`;
-              d++;
-              if (d < treeArr.length) {
-                doNextPromise(d)
-              } else {
-                statusDivs[levelCounter].textContent = 'creating branch...';
-                setTimeout(() => {
-                  document.querySelectorAll('.status-section')[levelCounter].style.display = 'none';
-                  statusDivs[levelCounter].textContent = '';
-                  statusDivs[levelCounter].style.width = '0%';
-                  levelCounter--;
-                  previousResolve(treeArr);
-                }, 500);
-              }
+        if (!treeArr.length) {
+          previousResolve();
+        } else {
+      
+          Promise.allSettled(treeArr.map(node => {
+            return new Promise(resolve => {
+              setTimeout(() => {
+                node.child = getChildrenFromOriginalTree(node.id);
+                getChildNodes(node.child, resolve);
+                console.log(node);
+              }, 1000);
             });
-          }
-        }
+          })).then(() => previousResolve(treeArr));
 
-        doNextPromise(0);
+        }
       }
 
       getChildNodes(treeData, resolve);
