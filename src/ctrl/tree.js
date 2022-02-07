@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadButton1 = document.getElementById('load-button1');
 
   function createSimpleTree() {
-    return createBranch(getSimpleTree());
+    const simpleTree = createBranch(getSimpleTree());
+    return simpleTree;
   }
 
   function renderAsyncTree() {

@@ -18,17 +18,19 @@ const config = {
 }
 
 function getSimpleTree() {
-  return TreeGen.generate(config);
+  const simpleTree = TreeGen.generate(config);
+  console.log(simpleTree);
+  return simpleTree;
 }
 
 function getAsyncTree() {
   return new Promise((resolve, reject) => {
 
-  setTimeout(() => {
-    resolve(getSimpleTree());
-  }, 2000);
+    setTimeout(() => {
+      resolve(getSimpleTree());
+    }, 2000);
 
-});
+  });
 }
 
 export { getSimpleTree, getAsyncTree };
