@@ -76,14 +76,12 @@ function getAsyncTreeV3() {
 
   const getChildrenFromOriginalTree = getChildrenFromTreeById(originalTreeData);
 
-
+  let event = new Event("hello", {bubbles: true}); // (2)
+  document.dispatchEvent(event);
 
 
 
   return new Promise((resolve, reject) => {
-
-    // statusDivs.forEach(div => div.textContent = '');
-    
     // get all data from API
     myTreeData = createMyBranchNodes(originalTreeData);
     statusDiv.textContent = 'getting source data...';
@@ -112,30 +110,17 @@ function getAsyncTreeV3() {
             break;
         }
 
-        // for (let i = 0; i < counterLevels.length; i++) {
-        //   if (counterLevels[i] > 0) {
-        //     levelCounter = i;
-            
-        //   }
-        // }
-
-        if (counterLevels[3] > 0) {
-          levelCounter = 3;
-          statusDivs[2].style.display = 'block';
-        } else if (counterLevels[2] > 0) {
-          statusDivs[1].style.display = 'block';
-          statusDivs[2].style.display = 'none';
-          levelCounter = 2;
-        } else if (counterLevels[1] > 0) {
-          statusDivs[0].style.display = 'block';
-          statusDivs[1].style.display = 'none';
-          statusDivs[2].style.display = 'none';
-          levelCounter = 1;
-        } else {
-          statusDivs[0].style.display = 'none';
-          statusDivs[1].style.display = 'none';
-          statusDivs[2].style.display = 'none';
-          levelCounter = 0;
+        for (let i = 0; i < counterLevels.length; i++) {
+          if (counterLevels[i] > 0) {
+            levelCounter = i;
+            statusDivs.forEach(div => div.style.display = 'block');
+            for (let j = i; j < statusDivs.length; j++) {
+              statusDivs[j].style.display = 'none';
+            }
+            for (let k = 0; k < i; k++) {
+              statusDivs[k].style.display = 'block';
+            }
+          }
         }
         // console.log(levelCounter);
       }

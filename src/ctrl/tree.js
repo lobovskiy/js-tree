@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadButton1 = document.getElementById('load-button1');
   const loadButton2 = document.getElementById('load-button2');
 
+  document.addEventListener("hello", function(event) { // (1)
+    alert("Привет от " + event.target.tagName); // Привет от H1
+  });
+
   function createSimpleTree() {
     return createBranch(getSimpleTree());
   }
