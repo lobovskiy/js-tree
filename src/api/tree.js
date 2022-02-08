@@ -40,12 +40,7 @@ function getAsyncTreeV3() {
 
   const statusDiv = document.getElementById('loading-status');
   let myTreeData = [];
-  const statusDivs = [
-    document.getElementById('status-level0'),
-    document.getElementById('status-level1'),
-    document.getElementById('status-level2'),
-    document.getElementById('status-level3'),
-  ];
+  const statusDivs = document.querySelectorAll('.status-section');
 
   function createMyBranchNodes(branchData) {
     let rootNodes = [];
@@ -101,73 +96,72 @@ function getAsyncTreeV3() {
   .then(treeData => {
     statusDiv.textContent = 'parsing tree...';
     return new Promise((resolve, reject) => {
+      
       let levelCounter = 0;
+      let counterLevels = [0, 0, 0, 0]
 
-      // function getChildNodes(treeArr, previousResolve) {
+      function setLevel(level, action) {
+        switch (action) {
+          case 'add':
+            counterLevels[level]++;
+            break;
+          case 'subtract':
+            counterLevels[level]--;
+            break;
+          default:
+            break;
+        }
 
-      //   const delay = node => {
-      //     return new Promise((resolve) => {
-      //       setTimeout(() => {
-      //         levelCounter++;
-      //         node.child = getChildrenFromOriginalTree(node.id);
-      //         getChildNodes(node.child, resolve);
-      //       }, 100);
-      //     });
-      //   }
+        // for (let i = 0; i < counterLevels.length; i++) {
+        //   if (counterLevels[i] > 0) {
+        //     levelCounter = i;
+            
+        //   }
+        // }
 
-      //   const doNextPromise = (d) => {
-      //     if (!treeArr.length) {
-      //       levelCounter--;
-      //       statusDivs[levelCounter].textContent = '';
-      //       previousResolve();
-      //     } else {
-      //       document.querySelectorAll('.status-section')[levelCounter].style.display = 'block';
-      //       statusDivs[levelCounter].style.width = `${(d + 1) * 100 / treeArr.length}%`;
-      //       delay(treeArr[d])
-      //       .then(() => {
-      //         // console.log(levelCounter);
-      //         statusDivs[levelCounter].style.width = `${(d + 1) * 100 / treeArr.length}%`;
-      //         d++;
-      //         if (d < treeArr.length) {
-      //           doNextPromise(d)
-      //         } else {
-      //           statusDivs[levelCounter].textContent = 'creating branch...';
-      //           setTimeout(() => {
-      //             document.querySelectorAll('.status-section')[levelCounter].style.display = 'none';
-      //             statusDivs[levelCounter].textContent = '';
-      //             statusDivs[levelCounter].style.width = '0%';
-      //             levelCounter--;
-      //             previousResolve(treeArr);
-      //           }, 500);
-      //         }
-      //       });
-      //     }
-      //   }
+        if (counterLevels[3] > 0) {
+          levelCounter = 3;
+          statusDivs[2].style.display = 'block';
+        } else if (counterLevels[2] > 0) {
+          statusDivs[1].style.display = 'block';
+          statusDivs[2].style.display = 'none';
+          levelCounter = 2;
+        } else if (counterLevels[1] > 0) {
+          statusDivs[0].style.display = 'block';
+          statusDivs[1].style.display = 'none';
+          statusDivs[2].style.display = 'none';
+          levelCounter = 1;
+        } else {
+          statusDivs[0].style.display = 'none';
+          statusDivs[1].style.display = 'none';
+          statusDivs[2].style.display = 'none';
+          levelCounter = 0;
+        }
+        // console.log(levelCounter);
+      }
 
-      //   doNextPromise(0);
-      // }
-
-      // getChildNodes(treeData, resolve);
-
-      function getChildNodes(treeArr, previousResolve) {
+      function getChildNodes(treeArr, level, previousResolve) {
         if (!treeArr.length) {
           previousResolve();
         } else {
+          level++;
+          setLevel(level - 1, 'add');
           Promise.allSettled(treeArr.map(node => {
             return new Promise(resolve => {
               setTimeout(() => {
                 node.child = getChildrenFromOriginalTree(node.id);
-                getChildNodes(node.child, resolve);
+                getChildNodes(node.child, level, resolve);
                 // console.log(node);
               }, 1000);
             });
           })).then(() => {
+            setLevel(level - 1, 'subtract');
             previousResolve(treeArr);
           });
         }
       }
 
-      getChildNodes(treeData, resolve);
+      getChildNodes(treeData, levelCounter, resolve);
   
     });
   })
