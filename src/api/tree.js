@@ -1,4 +1,5 @@
 import * as TreeGen from "tree-json-generator";
+import { connectAPIStarted, parsingDataStarted, parsingLevelIncreased, parsingLevelDecreased, finishParsingData, dataReady } from "../ctrl/events.js";
 
 const config = {
   node: { // Node fields, required
@@ -24,7 +25,7 @@ function getSimpleTree() {
 }
 
 function getAsyncTree() {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
 
     setTimeout(() => {
       resolve(getSimpleTree());
@@ -37,10 +38,7 @@ function getAsyncTree() {
 
 function getAsyncTreeV3() {
   const originalTreeData = getSimpleTree();
-
-  const statusDiv = document.getElementById('loading-status');
   let myTreeData = [];
-  const statusDivs = document.querySelectorAll('.status-section');
 
   function createMyBranchNodes(branchData) {
     let rootNodes = [];
@@ -83,11 +81,10 @@ function getAsyncTreeV3() {
 
 
 
-  return new Promise((resolve, reject) => {
-    // get all data from API
+  return new Promise(resolve => {
+
     myTreeData = createMyBranchNodes(originalTreeData);
-    statusDiv.textContent = 'getting source data...';
-    // document.dispatchEvent(connectingToAPI);
+    document.dispatchEvent(connectAPIStarted);
 
     setTimeout(() => {
       resolve(myTreeData);
@@ -95,10 +92,9 @@ function getAsyncTreeV3() {
 
   })
   .then(treeData => {
-    statusDiv.textContent = 'parsing tree...';
-    // document.dispatchEvent(startParsingData);
+    document.dispatchEvent(parsingDataStarted);
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       
       let levelCounter = 0;
       let counterLevels = [0, 0, 0, 0];
@@ -120,30 +116,21 @@ function getAsyncTreeV3() {
 
             if (i > levelCounter) {
               for (let diff = 0; diff < (i - levelCounter); diff++) {
-                // document.dispatchEvent(increaseParsingLevel);
-                console.log('+1');
+                document.dispatchEvent(parsingLevelIncreased);
+                // console.log('+1');
               }
             } else if (i < levelCounter) {
               for (let diff = 0; diff < (levelCounter - i); diff++) {
-                // document.dispatchEvent(decreaseParsingLevel);
-                console.log('-1');
+                document.dispatchEvent(parsingLevelDecreased);
+                // console.log('-1');
               }
             }
 
             levelCounter = i;
 
-            statusDivs.forEach(div => div.style.display = 'block');
-            for (let j = i; j < statusDivs.length; j++) {
-              statusDivs[j].style.display = 'none';
-            }
-            for (let k = 0; k < i; k++) {
-              statusDivs[k].style.display = 'block';
-            }
-
             break;
           }
         }
-        // console.log(levelCounter);
       }
 
       function getChildNodes(treeArr, level, previousResolve) {
@@ -157,7 +144,6 @@ function getAsyncTreeV3() {
               setTimeout(() => {
                 node.child = getChildrenFromOriginalTree(node.id);
                 getChildNodes(node.child, level, resolve);
-                // console.log(node);
               }, 1000);
             });
           })).then(() => {
@@ -172,13 +158,13 @@ function getAsyncTreeV3() {
     });
   })
   .then(treeData => {
-    return new Promise((resolve, reject) => {
-      statusDiv.textContent = 'creating tree...';
-      // document.dispatchEvent(finishParsingData);
+    return new Promise(resolve => {
+      document.dispatchEvent(finishParsingData);
 
       setTimeout(() => {
-        console.log(treeData);
-        statusDiv.textContent = 'done!';
+        // console.log(treeData);
+        // statusDiv.textContent = 'done!';
+        document.dispatchEvent(dataReady);
         resolve(treeData);
       }, 1000);
   

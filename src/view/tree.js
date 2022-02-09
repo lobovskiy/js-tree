@@ -99,4 +99,20 @@ function renderTree(tree, container) {
   container.append(tree);
 }
 
-export { createBranch, renderTree };
+const changeParsingLevel = container => action => {
+  const parsingStatusDiv = document.createElement('div');
+  const parsedLevelsNumber = container.children.length + 1;
+  parsingStatusDiv.textContent = `Parsing level ${parsedLevelsNumber}...`;
+  switch (action) {
+    case 'increase':
+      container.append(parsingStatusDiv);
+      break;
+    case 'decrease':
+      container.children[container.children.length - 1].remove();
+      break;
+    default:
+      break;
+  }
+}
+
+export { createBranch, renderTree, changeParsingLevel };
