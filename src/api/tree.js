@@ -76,8 +76,8 @@ function getAsyncTreeV3() {
 
   const getChildrenFromOriginalTree = getChildrenFromTreeById(originalTreeData);
 
-  let event = new Event("hello", {bubbles: true}); // (2)
-  document.dispatchEvent(event);
+  // let event = new Event("hello", {bubbles: true}); // (2)
+  // document.dispatchEvent(event);
 
 
 
@@ -85,6 +85,7 @@ function getAsyncTreeV3() {
     // get all data from API
     myTreeData = createMyBranchNodes(originalTreeData);
     statusDiv.textContent = 'getting source data...';
+    // document.dispatchEvent(connectingToAPI);
 
     setTimeout(() => {
       resolve(myTreeData);
@@ -93,10 +94,12 @@ function getAsyncTreeV3() {
   })
   .then(treeData => {
     statusDiv.textContent = 'parsing tree...';
+    // document.dispatchEvent(startParsingData);
+
     return new Promise((resolve, reject) => {
       
       let levelCounter = 0;
-      let counterLevels = [0, 0, 0, 0]
+      let counterLevels = [0, 0, 0, 0];
 
       function setLevel(level, action) {
         switch (action) {
@@ -110,8 +113,21 @@ function getAsyncTreeV3() {
             break;
         }
 
-        for (let i = 0; i < counterLevels.length; i++) {
+        for (let i = counterLevels.length - 1; i >= 0; i--) {
           if (counterLevels[i] > 0) {
+
+            if (i > levelCounter) {
+              for (let diff = 0; diff < (i - levelCounter); diff++) {
+                // document.dispatchEvent(increaseParsingLevel);
+                console.log('+1');
+              }
+            } else if (i < levelCounter) {
+              for (let diff = 0; diff < (levelCounter - i); diff++) {
+                // document.dispatchEvent(decreaseParsingLevel);
+                console.log('-1');
+              }
+            }
+
             levelCounter = i;
             statusDivs.forEach(div => div.style.display = 'block');
             for (let j = i; j < statusDivs.length; j++) {
@@ -120,6 +136,8 @@ function getAsyncTreeV3() {
             for (let k = 0; k < i; k++) {
               statusDivs[k].style.display = 'block';
             }
+
+            break;
           }
         }
         // console.log(levelCounter);
@@ -153,6 +171,8 @@ function getAsyncTreeV3() {
   .then(treeData => {
     return new Promise((resolve, reject) => {
       statusDiv.textContent = 'creating tree...';
+      // document.dispatchEvent(finishParsingData);
+
       setTimeout(() => {
         console.log(treeData);
         statusDiv.textContent = 'done!';

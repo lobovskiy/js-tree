@@ -1,15 +1,16 @@
-const nodeClass = 'branch__node',
-      nodeLevelModificatorClass = `${nodeClass}_level`,
-      nodeNameClass = `${nodeClass}-name`,
-      markerClass = `${nodeClass}-marker`,
-      markerModificatorClass = `${markerClass}_expanded`,
-      trailClass = `${nodeClass}-trail`,
-      trailLevelModificatorClass = `${trailClass}_level`;
+const branchClass = 'branch';
+const nodeClass = 'branch__node';
+const nodeLevelModificatorClass = 'branch__node_level';
+const nodeNameClass = 'branch__node-name';
+const markerClass = 'branch__node-marker';
+const markerModificatorClass = 'branch__node-marker_expanded';
+const trailClass = 'branch__node-trail';
+const trailLevelModificatorClass = 'branch__node-trail_level';
 
 function createBranch(arr) {
   if (arr?.length) {
     const branch = document.createElement('ul');
-    branch.classList.add('branch');
+    branch.classList.add(branchClass);
 
     const nodes = arr.map(createNode);
     branch.append(...nodes);
