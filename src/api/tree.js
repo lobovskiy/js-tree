@@ -57,17 +57,22 @@ function getAsyncTreeV3() {
 
   const getChildrenFromTreeById = treeData => id => {
     let childrenArr = [];
+    let isFound = false;
 
     function getChildren(tree) {
 
-      tree.forEach(node => {
-        if (node.id == id) {
-          childrenArr = createMyBranchNodes(node.child);
-          return;     // выйдет из всей функции getChildrenTree или только из forEach??
+      for (let i = 0; i < tree.length; i++) {
+        if (tree[i].id == id) {
+          childrenArr = createMyBranchNodes(tree[i].child);
+          isFound = true;
+          break;
         }
 
-        node?.child?.length && getChildren(node.child);
-      });
+        tree[i]?.child?.length && getChildren(tree[i].child);
+
+        if (isFound) break;
+      }
+
     }
 
     getChildren(treeData);
@@ -75,9 +80,6 @@ function getAsyncTreeV3() {
   }
 
   const getChildrenFromOriginalTree = getChildrenFromTreeById(originalTreeData);
-
-  // let event = new Event("hello", {bubbles: true}); // (2)
-  // document.dispatchEvent(event);
 
 
 
@@ -129,6 +131,7 @@ function getAsyncTreeV3() {
             }
 
             levelCounter = i;
+
             statusDivs.forEach(div => div.style.display = 'block');
             for (let j = i; j < statusDivs.length; j++) {
               statusDivs[j].style.display = 'none';
