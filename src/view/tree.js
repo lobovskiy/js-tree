@@ -1,15 +1,16 @@
-const nodeClass = 'branch__node',
-      nodeLevelModificatorClass = `${nodeClass}_level`,
-      nodeNameClass = `${nodeClass}-name`,
-      markerClass = `${nodeClass}-marker`,
-      markerModificatorClass = `${markerClass}_expanded`,
-      trailClass = `${nodeClass}-trail`,
-      trailLevelModificatorClass = `${trailClass}_level`;
+const branchClass = 'branch';
+const nodeClass = 'branch__node';
+const nodeLevelModificatorClass = 'branch__node_level';
+const nodeNameClass = 'branch__node-name';
+const markerClass = 'branch__node-marker';
+const markerModificatorClass = 'branch__node-marker_expanded';
+const trailClass = 'branch__node-trail';
+const trailLevelModificatorClass = 'branch__node-trail_level';
 
 function createBranch(arr) {
   if (arr?.length) {
     const branch = document.createElement('ul');
-    branch.classList.add('branch');
+    branch.classList.add(branchClass);
 
     const nodes = arr.map(createNode);
     branch.append(...nodes);
@@ -18,16 +19,16 @@ function createBranch(arr) {
   }
 }
 
-function addName(item, className) {
+function createName(item) {
   if (item.name) {
     const nameDiv = document.createElement('div');
     nameDiv.append(item.name);
-    nameDiv.classList.add(className);
+    nameDiv.classList.add(nodeNameClass);
     return nameDiv;
   }
 }
 
-function addMarker() {
+function createMarker() {
   const markerDiv = document.createElement('div');
   markerDiv.classList.add(markerClass);
   return markerDiv;
@@ -58,7 +59,7 @@ function addTrails(node, trails) {
   }
 }
 
-function setNodeLevel(item, node) {
+function setNodeLevelClass(item, node) {
   if (item?.level) {
     node.classList.add(nodeLevelModificatorClass + item.level);
   }
@@ -69,16 +70,16 @@ function createNode(item) {
     const node = document.createElement('li');
     node.classList.add(nodeClass);
 
+    // set class of level
+    setNodeLevelClass(item, node);
+
     // add trails
     const trails = getTrails(item);
     addTrails(node, trails);
 
-    // add level class
-    setNodeLevel(item, node);
-
     // add marker and name
-    const marker = addMarker();
-    const name = addName(item, nodeNameClass);
+    const marker = createMarker();
+    const name = createName(item);
     marker && node.append(marker);
     name && node.append(name);
 
@@ -86,7 +87,7 @@ function createNode(item) {
     const childBranch = createBranch(item.child);
     if (childBranch) {
       node.append(childBranch);
-      marker.classList.add(markerModificatorClass);
+      marker && marker.classList.add(markerModificatorClass);
     }
     
     return node;
@@ -98,4 +99,20 @@ function renderTree(tree, container) {
   container.append(tree);
 }
 
-export { createBranch, renderTree };
+const changeParsingLevel = container => action => {
+  const parsingStatusDiv = document.createElement('div');
+  const parsedLevelsNumber = container.children.length + 1;
+  parsingStatusDiv.textContent = `Parsing level ${parsedLevelsNumber}...`;
+  switch (action) {
+    case 'increase':
+      container.append(parsingStatusDiv);
+      break;
+    case 'decrease':
+      container.children[container.children.length - 1].remove();
+      break;
+    default:
+      break;
+  }
+}
+
+export { createBranch, renderTree, changeParsingLevel };
