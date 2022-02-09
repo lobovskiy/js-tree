@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("parsingDataStarted", () => statusAsyncTreeV3.textContent = 'parsing tree...');
   document.addEventListener("parsingLevelIncreased", () => changeParsingTreeV3('increase'));
   document.addEventListener("parsingLevelDecreased", () => changeParsingTreeV3('decrease'));
-  document.addEventListener("finishParsingData", () => statusAsyncTreeV3.textContent = 'creating tree...');
+  document.addEventListener("parsingDataFinished", () => statusAsyncTreeV3.textContent = 'creating tree...');
   document.addEventListener("dataReady", () => statusAsyncTreeV3.textContent = 'done!');
 
   function createSimpleTree() {

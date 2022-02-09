@@ -1,5 +1,6 @@
 import * as TreeGen from "tree-json-generator";
-import { connectAPIStarted, parsingDataStarted, parsingLevelIncreased, parsingLevelDecreased, finishParsingData, dataReady } from "../ctrl/events.js";
+import { connectAPIStarted, parsingDataStarted, parsingDataFinished, dataReady } from "../ctrl/events.js";
+import { createMyBranchNodes, getChildNodes, setOriginalTreeData } from "../ctrl/services.js";
 
 const config = {
   node: { // Node fields, required
@@ -34,58 +35,15 @@ function getAsyncTree() {
   });
 }
 
-
-
 function getAsyncTreeV3() {
   const originalTreeData = getSimpleTree();
   let myTreeData = [];
-
-  function createMyBranchNodes(branchData) {
-    let rootNodes = [];
-
-    if (branchData?.length) {
-      branchData.forEach(node => {
-        const { name, level, id } = node;
-        rootNodes.push({ name, level, id });
-      });
-    }
-    
-    return rootNodes;
-  }
-
-  const getChildrenFromTreeById = treeData => id => {
-    let childrenArr = [];
-    let isFound = false;
-
-    function getChildren(tree) {
-
-      for (let i = 0; i < tree.length; i++) {
-        if (tree[i].id == id) {
-          childrenArr = createMyBranchNodes(tree[i].child);
-          isFound = true;
-          break;
-        }
-
-        tree[i]?.child?.length && getChildren(tree[i].child);
-
-        if (isFound) break;
-      }
-
-    }
-
-    getChildren(treeData);
-    return childrenArr;
-  }
-
-  const getChildrenFromOriginalTree = getChildrenFromTreeById(originalTreeData);
-
-
+  setOriginalTreeData(originalTreeData);
 
   return new Promise(resolve => {
-
-    myTreeData = createMyBranchNodes(originalTreeData);
     document.dispatchEvent(connectAPIStarted);
 
+    myTreeData = createMyBranchNodes(originalTreeData);
     setTimeout(() => {
       resolve(myTreeData);
     }, 1000);
@@ -95,75 +53,14 @@ function getAsyncTreeV3() {
     document.dispatchEvent(parsingDataStarted);
 
     return new Promise(resolve => {
-      
-      let levelCounter = 0;
-      let counterLevels = [0, 0, 0, 0];
-
-      function setLevel(level, action) {
-        switch (action) {
-          case 'add':
-            counterLevels[level]++;
-            break;
-          case 'subtract':
-            counterLevels[level]--;
-            break;
-          default:
-            break;
-        }
-
-        for (let i = counterLevels.length - 1; i >= 0; i--) {
-          if (counterLevels[i] > 0) {
-
-            if (i > levelCounter) {
-              for (let diff = 0; diff < (i - levelCounter); diff++) {
-                document.dispatchEvent(parsingLevelIncreased);
-                // console.log('+1');
-              }
-            } else if (i < levelCounter) {
-              for (let diff = 0; diff < (levelCounter - i); diff++) {
-                document.dispatchEvent(parsingLevelDecreased);
-                // console.log('-1');
-              }
-            }
-
-            levelCounter = i;
-
-            break;
-          }
-        }
-      }
-
-      function getChildNodes(treeArr, level, previousResolve) {
-        if (!treeArr.length) {
-          previousResolve();
-        } else {
-          level++;
-          setLevel(level - 1, 'add');
-          Promise.allSettled(treeArr.map(node => {
-            return new Promise(resolve => {
-              setTimeout(() => {
-                node.child = getChildrenFromOriginalTree(node.id);
-                getChildNodes(node.child, level, resolve);
-              }, 1000);
-            });
-          })).then(() => {
-            setLevel(level - 1, 'subtract');
-            previousResolve(treeArr);
-          });
-        }
-      }
-
-      getChildNodes(treeData, levelCounter, resolve);
-  
+      getChildNodes(treeData, 0, resolve);
     });
   })
   .then(treeData => {
     return new Promise(resolve => {
-      document.dispatchEvent(finishParsingData);
+      document.dispatchEvent(parsingDataFinished);
 
       setTimeout(() => {
-        // console.log(treeData);
-        // statusDiv.textContent = 'done!';
         document.dispatchEvent(dataReady);
         resolve(treeData);
       }, 1000);
