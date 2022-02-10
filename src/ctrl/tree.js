@@ -1,5 +1,6 @@
 import { getSimpleTree, getAsyncTree, getAsyncTreeV3 } from '../api/tree.js';
-import { createBranch, renderTree, changeParsingLevel } from '../view/tree.js';
+import { createBranch, renderTree, changeParsingLevel, countItemsByLevel, resetParsedItemsCounter } from '../view/tree.js';
+import { resetParsingLevelCounter } from './services/counters.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   const wrapperSimpleTree = document.getElementById('simple-tree');
@@ -10,15 +11,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const wrapperAsyncTreeV3 = document.getElementById('tree-v3');
   const loadButtonTreeV3 = document.getElementById('tree-v3-load-button');
   const statusAsyncTreeV3 = document.getElementById('tree-v3-loading-status');
-  const parsingStatusAsyncTree2 = document.getElementById('tree-v3-parsing-status');
-  const changeParsingTreeV3 = changeParsingLevel(parsingStatusAsyncTree2);
+  const parsingStatusAsyncTreeV3 = document.getElementById('tree-v3-parsing-status');
+  const changeParsingLevelTreeV3 = changeParsingLevel(parsingStatusAsyncTreeV3);
+  const countItemsTreeV3 = countItemsByLevel(parsingStatusAsyncTreeV3);
 
   document.addEventListener("connectAPIStarted", () => statusAsyncTreeV3.textContent = 'getting source data...');
   document.addEventListener("parsingDataStarted", () => statusAsyncTreeV3.textContent = 'parsing tree...');
-  document.addEventListener("parsingLevelIncreased", () => changeParsingTreeV3('increase'));
-  document.addEventListener("parsingLevelDecreased", () => changeParsingTreeV3('decrease'));
+  document.addEventListener("parsingLevelIncreased", () => changeParsingLevelTreeV3('increase'));
+  document.addEventListener("parsingLevelDecreased", () => changeParsingLevelTreeV3('decrease'));
   document.addEventListener("parsingDataFinished", () => statusAsyncTreeV3.textContent = 'creating tree...');
-  document.addEventListener("dataReady", () => statusAsyncTreeV3.textContent = 'done!');
+  document.addEventListener("dataReady", () => {
+    statusAsyncTreeV3.textContent = 'done!';
+    resetParsedItemsCounter();
+    resetParsingLevelCounter();
+  });
+  document.addEventListener("itemParsed", event => countItemsTreeV3(event.detail.level));
 
   function createSimpleTree() {
     return createBranch(getSimpleTree());

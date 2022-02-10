@@ -1,9 +1,13 @@
-const connectAPIStarted = new Event("connectAPIStarted", {bubbles: true});
-const parsingDataStarted = new Event("parsingDataStarted", {bubbles: true});
-const parsingDataFinished = new Event("parsingDataFinished", {bubbles: true});
-const parsingLevelIncreased = new Event("parsingLevelIncreased", {bubbles: true});
-const parsingLevelDecreased = new Event("parsingLevelDecreased", {bubbles: true});
-const dataReady = new Event("dataReady", {bubbles: true});
+const connectAPIStarted = new Event("connectAPIStarted");
+const parsingDataStarted = new Event("parsingDataStarted");
+const parsingDataFinished = new Event("parsingDataFinished");
+const parsingLevelIncreased = new Event("parsingLevelIncreased");
+const parsingLevelDecreased = new Event("parsingLevelDecreased");
+const dataReady = new Event("dataReady");
+
+function createItemCounterEventWithLevel(level) {
+  return new CustomEvent("itemParsed", { detail: { level } })
+}
 
 export {
   connectAPIStarted,
@@ -11,5 +15,6 @@ export {
   parsingDataFinished,
   parsingLevelIncreased,
   parsingLevelDecreased,
-  dataReady
+  dataReady,
+  createItemCounterEventWithLevel
 }

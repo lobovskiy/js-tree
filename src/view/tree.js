@@ -101,18 +101,31 @@ function renderTree(tree, container) {
 
 const changeParsingLevel = container => action => {
   const parsingStatusDiv = document.createElement('div');
-  const parsedLevelsNumber = container.children.length + 1;
-  parsingStatusDiv.textContent = `Parsing level ${parsedLevelsNumber}...`;
+  const parsedLevelsNumber = container.children.length;
+  parsingStatusDiv.innerHTML = `Parsing level ${parsedLevelsNumber}... <span></span>`;
   switch (action) {
     case 'increase':
       container.append(parsingStatusDiv);
       break;
     case 'decrease':
-      container.children[container.children.length - 1].remove();
+      container?.lastChild && container.lastChild.remove();
       break;
     default:
       break;
   }
 }
 
-export { createBranch, renderTree, changeParsingLevel };
+let itemParsedByLevels = [];
+
+const countItemsByLevel = container => level => {
+  !itemParsedByLevels[level] && (itemParsedByLevels[level] = 0);
+  itemParsedByLevels[level]++;
+  
+  container.children[level].querySelector('span').textContent = `Parsed ${itemParsedByLevels[level]} items.`;
+}
+
+function resetParsedItemsCounter() {
+  itemParsedByLevels = [];
+}
+
+export { createBranch, renderTree, changeParsingLevel, countItemsByLevel, resetParsedItemsCounter };
