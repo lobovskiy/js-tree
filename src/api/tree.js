@@ -1,6 +1,7 @@
 import * as TreeGen from "tree-json-generator";
 import { connectAPIStarted, parsingDataStarted, parsingDataFinished, dataReady } from "../ctrl/events.js";
-import { createMyBranchNodes, getChildNodes, setOriginalTreeData } from "../ctrl/services.js";
+import { getChildNodes } from "../ctrl/services/services.js";
+import { createParentNodes, setOriginalTreeData } from "../ctrl/services/my-data.js";
 
 const config = {
   node: { // Node fields, required
@@ -43,7 +44,7 @@ function getAsyncTreeV3() {
   return new Promise(resolve => {
     document.dispatchEvent(connectAPIStarted);
 
-    myTreeData = createMyBranchNodes(originalTreeData);
+    myTreeData = createParentNodes();
     setTimeout(() => {
       resolve(myTreeData);
     }, 1000);
@@ -53,7 +54,7 @@ function getAsyncTreeV3() {
     document.dispatchEvent(parsingDataStarted);
 
     return new Promise(resolve => {
-      getChildNodes(treeData, 0, resolve);
+      getChildNodes(treeData, resolve);
     });
   })
   .then(treeData => {
